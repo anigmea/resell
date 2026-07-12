@@ -4,3 +4,12 @@ node_modules
 .turbo
 dist
 .next
+*.tsbuildinfo
+.DS_Store
+coverage/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+build/
+.env.*
+!.env.example
