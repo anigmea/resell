@@ -1,0 +1,5 @@
+{
+  "name": "@resell/config",
+  "version": "0.0.1",
+  "files": ["tsconfig.base.json", "eslint.base.js"]
+}
