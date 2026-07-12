@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+enum KycStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+}
+
+enum Category {
+  CONCERT
+  SPORTS
+  COMEDY
+  FESTIVAL
+  OTHER
+}
+
+enum EventStatus {
+  UPCOMING
+  LIVE
+  PAST
+  CANCELLED
+}
+
+enum ListingStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SOLD
+  EXPIRED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  phone         String     @unique
+  passwordHash  String
+  role          Role       @default(BUYER)
+  kycStatus     KycStatus  @default(UNVERIFIED)
+  upiId         String?
+  bankAccount   String?
+  phoneVerified Boolean    @default(false)
+  listings      Listing[]
+  buyerOrders   Order[]    @relation("BuyerOrders")
+  sellerOrders  Order[]    @relation("SellerOrders")
+  createdAt     DateTime   @default(now())
+}
+
+model Venue {
+  id        String   @id @default(cuid())
+  name      String
+  city      String
+  address   String
+  mapsUrl   String?
+  capacity  Int?
+  events    Event[]
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  category    Category
+  venueId     String
+  venue       Venue       @relation(fields: [venueId], references: [id])
+  organizer   String?
+  dateTime    DateTime
+  bannerImage String?
+  status      EventStatus @default(UPCOMING)
+  city        String
+  listings    Listing[]
+  createdAt   DateTime    @default(now())
+
+  @@index([city])
+  @@index([category])
+  @@index([dateTime])
+}
+
+model Listing {
+  id              String        @id @default(cuid())
+  eventId         String
+  event           Event         @relation(fields: [eventId], references: [id])
+  sellerId        String
+  seller          User          @relation(fields: [sellerId], references: [id])
+  seatSection     String?
+  seatRow         String?
+  seatNumber      String?
+  originalPrice   Int
+  askingPrice     Int
+  ticketFileUrl   String
+  status          ListingStatus @default(PENDING_VERIFICATION)
+  expiresAt       DateTime?
+  orders          Order[]
+  createdAt       DateTime      @default(now())
+}
+
+model Order {
+  id                String        @id @default(cuid())
+  listingId         String
+  listing           Listing       @relation(fields: [listingId], references: [id])
+  buyerId           String
+  buyer             User          @relation("BuyerOrders", fields: [buyerId], references: [id])
+  sellerId          String
+  seller            User          @relation("SellerOrders", fields: [sellerId], references: [id])
+  amount            Int
+  platformFee       Int
+  sellerPayout      Int
+  paymentStatus     PaymentStatus @default(PENDING)
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  ticketReleasedAt  DateTime?
+  createdAt         DateTime      @default(now())
+}
