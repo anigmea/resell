@@ -90,9 +90,7 @@ model Event {
   listings    Listing[]
   createdAt   DateTime    @default(now())
 
-  @@index([city])
-  @@index([category])
-  @@index([dateTime])
+  @@index([city, category, dateTime])
 }
 
 model Listing {
