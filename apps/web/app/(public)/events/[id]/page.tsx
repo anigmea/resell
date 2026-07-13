@@ -82,11 +82,11 @@ export default async function EventPage({ params }: { params: { id: string } }) 
       {/* Listings */}
       <div className="px-8 py-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-[0.8rem] font-semibold text-secondary">
+          <p className="text-[0.8rem] font-semibold text-secondary">
             {listings.length > 0
-              ? `${listings.length} verified listing${listings.length === 1 ? '' : 's'}${minPrice ? ` · from ₹${(minPrice / 100).toLocaleString('en-IN')}` : ''}`
+              ? `${listings.length} verified listing${listings.length === 1 ? '' : 's'}${minPrice != null ? ` · from ₹${(minPrice / 100).toLocaleString('en-IN')}` : ''}`
               : 'No tickets available right now.'}
-          </h3>
+          </p>
           {listings.length > 0 && (
             <select className="bg-surface border border-border rounded-md px-3 py-[5px] text-[0.72rem] text-muted outline-none cursor-pointer">
               <option>Price: Low to High</option>
@@ -120,7 +120,10 @@ export default async function EventPage({ params }: { params: { id: string } }) 
                     ₹{(l.originalPrice / 100).toLocaleString('en-IN')}
                   </div>
                 </div>
-                <button className="bg-accent hover:bg-accent-hover text-black text-[0.75rem] font-bold px-4 py-[7px] rounded-md border-0 cursor-pointer transition-colors whitespace-nowrap">
+                <button
+                  className="bg-accent hover:bg-accent-hover text-black text-[0.75rem] font-bold px-4 py-[7px] rounded-md border-0 cursor-pointer transition-colors whitespace-nowrap"
+                  aria-label={`Buy ticket — ${seat}`}
+                >
                   Buy now
                 </button>
               </div>

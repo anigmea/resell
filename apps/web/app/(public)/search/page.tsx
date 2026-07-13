@@ -25,10 +25,12 @@ export default async function SearchPage({
   return (
     <div className="min-h-screen bg-bg">
       <Nav />
-      <div className="px-8 py-8 max-w-2xl">
+      <div className="px-8 py-8 max-w-2xl mx-auto">
         <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-6">Search</h1>
         <form method="GET" className="flex gap-2 mb-8">
+          <label htmlFor="search-q" className="sr-only">Search events</label>
           <input
+            id="search-q"
             name="q"
             type="text"
             defaultValue={q}
@@ -36,6 +38,7 @@ export default async function SearchPage({
             autoFocus
             className="flex-1 bg-surface border border-border rounded-lg px-4 py-3 text-[0.875rem] text-primary placeholder:text-disabled outline-none focus:border-accent/30 transition-colors"
           />
+          {city && <input type="hidden" name="city" value={city} />}
           <button
             type="submit"
             className="bg-accent hover:bg-accent-hover text-black text-[0.82rem] font-bold px-5 rounded-lg border-0 cursor-pointer transition-colors"
@@ -72,7 +75,7 @@ export default async function SearchPage({
                 </div>
                 <div className="text-right flex-shrink-0">
                   <div className="text-[0.88rem] font-bold text-accent tracking-tighter2">
-                    {ev.minPrice ? `₹${(ev.minPrice / 100).toLocaleString('en-IN')}` : '—'}
+                    {ev.minPrice != null ? `₹${(ev.minPrice / 100).toLocaleString('en-IN')}` : '—'}
                   </div>
                   <div className="text-[0.63rem] text-muted mt-[2px]">
                     {d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
