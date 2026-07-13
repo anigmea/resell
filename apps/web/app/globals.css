@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: #070707; color: #e8e8e8; }
+  body {
+    margin: 0;
+    font-family: var(--font-outfit), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  input, select, button, textarea { font-family: inherit; }
+}
+
+@layer utilities {
+  .dot-grid {
+    background-image: radial-gradient(circle, #1d1d1d 1px, transparent 1px);
+    background-size: 26px 26px;
+    position: relative;
+  }
+  .dot-grid::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, #070707 100%);
+    pointer-events: none;
+  }
+  .logo-glow { box-shadow: 0 0 8px #10b981; }
+  .accent-glow { box-shadow: 0 0 6px #10b981aa; }
+}
+
+@layer components {
+  .nav-link {
+    @apply font-medium no-underline transition-colors hover:text-primary;
+    font-size: 0.78rem;
+    color: #888888;
+  }
+  .row-hover { position: relative; }
+  .row-hover::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 2px;
+    background: #10b981;
+    opacity: 0;
+    border-radius: 0 2px 2px 0;
+    transition: opacity 0.12s;
+  }
+  .row-hover:hover::before { opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+.animate-blink { animation: blink 2s infinite; }
