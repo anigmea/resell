@@ -7,7 +7,6 @@
   html { background: #070707; color: #e8e8e8; }
   body {
     margin: 0;
-    font-family: var(--font-outfit), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   input, select, button, textarea { font-family: inherit; }
