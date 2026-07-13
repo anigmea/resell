@@ -25,24 +25,34 @@ const CATEGORY_GRADIENT: Record<string, string> = {
 
 const TICKER_ITEMS = [
   'Just sold — Coldplay GA · ₹5,200',
-  'New listing — IPL MI vs RR · ₹980',
+  'Just sold — IPL MI vs RR · ₹980',
   'Just sold — Diljit Floor · ₹3,100',
-  'New listing — Prateek Kuhad · ₹1,400',
+  'Just sold — Prateek Kuhad · ₹1,400',
 ]
+
+export const dynamic = 'force-dynamic'
+
+const CAT_MAP: Record<string, string> = {
+  Concerts: 'CONCERT', Sports: 'SPORTS', Comedy: 'COMEDY',
+  Festival: 'FESTIVAL', Theatre: 'THEATRE',
+}
 
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: { city?: string; category?: string }
+  searchParams: { city?: string | string[]; category?: string | string[] }
 }) {
+  const city     = Array.isArray(searchParams.city)     ? searchParams.city[0]     : searchParams.city
+  const category = Array.isArray(searchParams.category) ? searchParams.category[0] : searchParams.category
+
   const params = new URLSearchParams()
-  if (searchParams.city)     params.set('city',     searchParams.city)
-  if (searchParams.category) params.set('category', searchParams.category)
+  if (city)     params.set('city',     city)
+  if (category) params.set('category', category)
 
   const events = await apiFetch<Event[]>(`/events?${params}`).catch(() => [] as Event[])
 
-  const featured = events.slice(0, 3)
-  const rest     = events.slice(3)
+  const featured  = events.slice(0, 3)
+  const rest      = events.slice(3)
 
   return (
     <div className="min-h-screen bg-bg">
@@ -55,15 +65,17 @@ export default async function HomePage({
           Live
         </div>
         <div className="w-px h-[14px] bg-[#222]" />
-        <div className="flex gap-8 text-[0.7rem] text-muted overflow-hidden">
-          {TICKER_ITEMS.map((item, i) => {
-            const [prefix, ...rest] = item.split('—')
-            return (
-              <span key={i} className="whitespace-nowrap">
-                {prefix}—<strong className="text-secondary font-medium">{rest.join('—')}</strong>
-              </span>
-            )
-          })}
+        <div className="overflow-hidden flex-1">
+          <div className="flex gap-12 text-[0.7rem] text-muted animate-ticker whitespace-nowrap w-max">
+            {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => {
+              const [prefix, ...parts] = item.split('—')
+              return (
+                <span key={i} className="whitespace-nowrap">
+                  {prefix}—<strong className="text-secondary font-medium">{parts.join('—')}</strong>
+                </span>
+              )
+            })}
+          </div>
         </div>
       </div>
 
@@ -88,13 +100,13 @@ export default async function HomePage({
           <div className="flex flex-col gap-6 flex-shrink-0 pt-2 text-right">
             <div>
               <div className="text-[2rem] font-extrabold text-primary tracking-tighter2 leading-none">
-                2,4<em className="not-italic text-accent">00</em>
+                2,4<span className="text-accent">00</span>
               </div>
               <div className="text-[0.62rem] text-muted uppercase tracking-wider3 mt-1">Active listings</div>
             </div>
             <div>
               <div className="text-[2rem] font-extrabold text-primary tracking-tighter2 leading-none">
-                <em className="not-italic text-accent">₹</em>12cr
+                <span className="text-accent">₹</span>12cr
               </div>
               <div className="text-[0.62rem] text-muted uppercase tracking-wider3 mt-1">Sold this month</div>
             </div>
@@ -117,7 +129,7 @@ export default async function HomePage({
           <select
             name="city"
             className="bg-transparent border-none outline-none text-[0.8rem] text-secondary px-5 cursor-pointer appearance-none"
-            defaultValue={searchParams.city ?? ''}
+            defaultValue={city ?? ''}
           >
             <option value="">All cities</option>
             <option value="Mumbai">Mumbai</option>
@@ -135,15 +147,20 @@ export default async function HomePage({
 
       {/* Category tabs */}
       <div className="flex border-b border-border px-8 overflow-x-auto">
-        {['All', 'Concerts', 'Sports', 'Comedy', 'Festival', 'Theatre'].map((cat) => (
-          <Link
-            key={cat}
-            href={cat === 'All' ? '/' : `/?category=${cat.toUpperCase().replace('S','')}`}
-            className="text-[0.73rem] font-medium text-disabled px-4 py-3 whitespace-nowrap border-b-2 border-transparent no-underline hover:text-secondary transition-colors data-[active=true]:text-accent data-[active=true]:border-accent"
-          >
-            {cat}
-          </Link>
-        ))}
+        {['All', 'Concerts', 'Sports', 'Comedy', 'Festival', 'Theatre'].map((cat) => {
+          const catValue = cat === 'All' ? undefined : CAT_MAP[cat]
+          const isActive = cat === 'All' ? !category : category === catValue
+          return (
+            <Link
+              key={cat}
+              href={cat === 'All' ? '/' : `/?category=${catValue}`}
+              data-active={isActive ? 'true' : undefined}
+              className="text-[0.73rem] font-medium text-disabled px-4 py-3 whitespace-nowrap border-b-2 border-transparent no-underline hover:text-secondary transition-colors data-[active=true]:text-accent data-[active=true]:border-accent"
+            >
+              {cat}
+            </Link>
+          )
+        })}
       </div>
 
       {/* Featured */}
@@ -190,9 +207,9 @@ export default async function HomePage({
       {/* All events */}
       <div className="flex items-center gap-3 px-8 pt-5 pb-3">
         <h2 className="text-[0.6rem] font-bold text-muted uppercase tracking-wider4 whitespace-nowrap">
-          All events{searchParams.city ? ` · ${searchParams.city}` : ''}
+          All events{city ? ` · ${city}` : ''}
         </h2>
-        <hr className="flex-1 border-none" style={{ borderTop: '1px solid #181818' }} />
+        <hr className="flex-1 border-t border-border border-b-0 border-l-0 border-r-0" />
       </div>
 
       {events.length === 0 ? (
@@ -201,7 +218,7 @@ export default async function HomePage({
         <>
           {/* Table header */}
           <div className="grid grid-cols-[56px_1fr_120px_90px] px-8 py-[0.45rem] border-b border-border-subtle">
-            {['', 'Event', 'Venue', 'From'].map((h, i) => (
+            {['Date', 'Event', 'Venue', 'From'].map((h, i) => (
               <span key={i} className={`text-[0.58rem] font-semibold text-disabled uppercase tracking-wider3 ${i === 3 ? 'text-right' : ''}`}>
                 {h}
               </span>
@@ -231,7 +248,6 @@ export default async function HomePage({
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="category">{ev.category}</Badge>
-                    <span className="text-[0.66rem] text-muted">{ev.venue.name}</span>
                   </div>
                 </div>
                 <div className="text-[0.69rem] text-muted">{ev.venue.name}</div>

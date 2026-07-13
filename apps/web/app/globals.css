@@ -54,3 +54,9 @@
   50%       { opacity: 0.3; }
 }
 .animate-blink { animation: blink 2s infinite; }
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker { animation: ticker-scroll 24s linear infinite; }
