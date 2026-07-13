@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Resell",
+    "slug": "resell",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "platforms": ["ios", "android"],
+    "ios":     { "supportsTablet": false, "bundleIdentifier": "in.resell.app" },
+    "android": { "package": "in.resell.app" }
+  }
+}
