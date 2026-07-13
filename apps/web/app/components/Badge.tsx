@@ -1,8 +1,10 @@
+import type { ReactNode } from 'react'
+
 type BadgeVariant = 'category' | 'active' | 'pending' | 'sold' | 'hot' | 'new' | 'upcoming' | 'cancelled'
 
 interface BadgeProps {
   variant: BadgeVariant
-  children: React.ReactNode
+  children: ReactNode
 }
 
 const styles: Record<BadgeVariant, string> = {
