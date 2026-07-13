@@ -15,6 +15,12 @@ const EVENT_STATUS_VARIANT: Record<string, 'active' | 'pending' | 'sold' | 'upco
   PAST:      'sold',
   CANCELLED: 'sold',
 }
+const EVENT_STATUS_LABEL: Record<string, string> = {
+  UPCOMING:  'Upcoming',
+  LIVE:      'Live',
+  PAST:      'Past',
+  CANCELLED: 'Cancelled',
+}
 
 export default async function AdminEventsPage() {
   const events = await apiFetch<AdminEvent[]>('/admin/events').catch(() => [] as AdminEvent[])
@@ -51,7 +57,7 @@ export default async function AdminEventsPage() {
                   {d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </div>
                 <div className="text-[0.72rem] text-secondary">{ev.category}</div>
-                <Badge variant={EVENT_STATUS_VARIANT[ev.status] ?? 'sold'}>{ev.status}</Badge>
+                <Badge variant={EVENT_STATUS_VARIANT[ev.status] ?? 'sold'}>{EVENT_STATUS_LABEL[ev.status] ?? ev.status}</Badge>
                 <div className="flex gap-2">
                   <button className="text-[0.62rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded px-2 py-[3px] cursor-pointer hover:text-primary hover:border-[#333] transition-all">
                     Edit
