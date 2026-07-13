@@ -34,7 +34,8 @@ export default function NewListingPage() {
       if (!uploadRes.ok) throw new Error('Failed to get upload URL')
       const { uploadUrl, fileUrl } = await uploadRes.json()
 
-      await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
+      const putRes = await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
+      if (!putRes.ok) throw new Error('Failed to upload ticket file')
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'}/listings`, {
         method: 'POST',

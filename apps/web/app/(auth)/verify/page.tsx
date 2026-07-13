@@ -3,9 +3,22 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 export default function VerifyPage() {
-  const [otp, setOtp]         = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
+  const [otp, setOtp]           = useState('')
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
+  const [resendSent, setResent] = useState(false)
+
+  async function handleResend() {
+    setResent(false)
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'}/auth/otp/resend`, {
+        method: 'POST', credentials: 'include',
+      })
+      setResent(true)
+    } catch {
+      // silently fail — user can try again
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -68,10 +81,16 @@ export default function VerifyPage() {
         </form>
 
         <p className="text-center mt-5 text-[0.73rem] text-muted">
-          Didn&apos;t get the code?{' '}
-          <button className="text-accent bg-transparent border-0 cursor-pointer text-[0.73rem] p-0 hover:underline">
-            Resend OTP
-          </button>
+          {resendSent ? (
+            <span className="text-accent">Code resent!</span>
+          ) : (
+            <>
+              Didn&apos;t get the code?{' '}
+              <button onClick={handleResend} className="text-accent bg-transparent border-0 cursor-pointer text-[0.73rem] p-0 hover:underline">
+                Resend OTP
+              </button>
+            </>
+          )}
         </p>
       </div>
     </div>
