@@ -1,3 +1,96 @@
-export default function AdminListingsPage() {
-  return <main style={{ padding: '2rem' }}><h1>Admin: Listing Verification Queue</h1></main>
+// apps/web/app/(admin)/admin/listings/page.tsx
+import Link from 'next/link'
+import Nav from '../../../components/Nav'
+import Badge from '../../../components/Badge'
+import { apiFetch } from '../../../../lib/api'
+
+type AdminListing = {
+  id: string; askingPrice: number; originalPrice: number; status: string;
+  ticketFileUrl: string;
+  seatSection?: string; seatRow?: string; seatNumber?: string;
+  event: { title: string; dateTime: string }
+  seller: { name: string; email: string }
+}
+
+const FILTER_TABS = ['All', 'Pending', 'Active', 'Rejected'] as const
+
+export default async function AdminListingsPage({
+  searchParams,
+}: {
+  searchParams: { status?: string | string[] }
+}) {
+  const status   = (Array.isArray(searchParams.status) ? searchParams.status[0] : searchParams.status)?.toUpperCase() ?? ''
+  const endpoint = status && status !== 'ALL' ? `/admin/listings?status=${status}` : '/admin/listings'
+  const listings = await apiFetch<AdminListing[]>(endpoint).catch(() => [] as AdminListing[])
+
+  const activeTab = searchParams.status ? (Array.isArray(searchParams.status) ? searchParams.status[0] : searchParams.status) : 'All'
+
+  return (
+    <div className="min-h-screen bg-bg">
+      <Nav />
+      <div className="px-8 py-8">
+        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-6">Listing Verification Queue</h1>
+
+        <div className="flex border-b border-border mb-6">
+          {FILTER_TABS.map((tab) => {
+            const isActive = tab === 'All' ? !searchParams.status : activeTab?.toLowerCase() === tab.toLowerCase()
+            return (
+              <Link
+                key={tab}
+                href={tab === 'All' ? '/admin/listings' : `/admin/listings?status=${tab}`}
+                className={`text-[0.73rem] font-medium px-4 py-3 no-underline whitespace-nowrap border-b-2 transition-colors ${
+                  isActive ? 'text-accent border-accent' : 'text-disabled border-transparent hover:text-secondary'
+                }`}
+              >
+                {tab}
+              </Link>
+            )
+          })}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {listings.length === 0 ? (
+            <p className="text-muted text-sm py-8 text-center">No listings in this queue.</p>
+          ) : listings.map((l) => {
+            const seat      = [l.seatSection && `Section ${l.seatSection}`, l.seatRow && `Row ${l.seatRow}`, l.seatNumber && `Seat ${l.seatNumber}`].filter(Boolean).join(' · ') || 'GA'
+            const isPending = l.status === 'PENDING_VERIFICATION'
+            return (
+              <div key={l.id} className="flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg">
+                <div className="flex-1 min-w-0">
+                  <div className="text-[0.84rem] font-medium text-primary mb-[3px]">{l.event.title}</div>
+                  <div className="text-[0.67rem] text-muted">
+                    {seat} · Seller: {l.seller.name} ({l.seller.email})
+                  </div>
+                </div>
+                <a
+                  href={l.ticketFileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[0.65rem] text-accent no-underline hover:underline whitespace-nowrap"
+                >
+                  View ticket →
+                </a>
+                <div className="text-[0.85rem] font-bold text-accent tracking-tighter2">
+                  ₹{(l.askingPrice / 100).toLocaleString('en-IN')}
+                </div>
+                <Badge variant={l.status === 'ACTIVE' ? 'active' : l.status === 'PENDING_VERIFICATION' ? 'pending' : 'sold'}>
+                  {l.status === 'PENDING_VERIFICATION' ? 'Pending' : l.status}
+                </Badge>
+                {isPending && (
+                  <div className="flex gap-2 flex-shrink-0">
+                    <button className="text-[0.65rem] font-bold bg-accent/10 border border-accent/30 text-accent rounded-md px-3 py-[5px] cursor-pointer hover:bg-accent/20 transition-colors">
+                      Approve
+                    </button>
+                    <button className="text-[0.65rem] font-bold bg-danger/5 border border-danger/20 text-danger rounded-md px-3 py-[5px] cursor-pointer hover:bg-danger/10 transition-colors">
+                      Reject
+                    </button>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
 }
