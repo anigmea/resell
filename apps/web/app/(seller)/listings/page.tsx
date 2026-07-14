@@ -69,9 +69,11 @@ export default async function MyListingsPage() {
                     ₹{(l.askingPrice / 100).toLocaleString('en-IN')}
                   </div>
                   <div className="flex gap-2">
-                    <button className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] py-1 cursor-pointer hover:border-[#333] hover:text-secondary transition-all disabled:opacity-30" disabled={isSold}>
-                      Edit
-                    </button>
+                    {!isSold && (
+                      <Link href={`/listings/${l.id}/edit`} className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] py-1 hover:border-[#333] hover:text-secondary transition-all no-underline">
+                        Edit
+                      </Link>
+                    )}
                     {!isSold && <RemoveButton listingId={l.id} />}
                   </div>
                 </div>
