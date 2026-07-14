@@ -117,7 +117,7 @@ async function main() {
       create: {
         id:          'event-ipl-rcb-dc',
         title:       'IPL 2026: Royal Challengers vs Delhi Capitals',
-        description: 'RCB's home fortress — come witness the roaring crowd at Chinnaswamy.',
+        description: "RCB's home fortress — come witness the roaring crowd at Chinnaswamy.",
         category:    'SPORTS',
         venueId:     chinnaswamy.id,
         organizer:   'Board of Control for Cricket in India',
@@ -147,7 +147,7 @@ async function main() {
       create: {
         id:          'event-kenny-delhi',
         title:       'Kenny Sebastian: Don\'t Be That Guy',
-        description: 'Kenny Sebastian's newest hour of stand-up, performing live in Delhi.',
+        description: "Kenny Sebastian's newest hour of stand-up, performing live in Delhi.",
         category:    'COMEDY',
         venueId:     indiraGandhi.id,
         organizer:   'Comedy Club India',

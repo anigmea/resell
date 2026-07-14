@@ -5,13 +5,17 @@ import { PrismaClient } from '@resell/db'
 const PLATFORM_FEE_RATE = 0.05
 
 export class OrderService {
-  private rzp: Razorpay
+  private _rzp: Razorpay | null = null
 
-  constructor(private prisma: PrismaClient) {
-    this.rzp = new Razorpay({
-      key_id:     process.env.RAZORPAY_KEY_ID     ?? '',
-      key_secret: process.env.RAZORPAY_KEY_SECRET ?? '',
-    })
+  constructor(private prisma: PrismaClient) {}
+
+  private get rzp(): Razorpay {
+    if (!this._rzp) {
+      const key_id = process.env.RAZORPAY_KEY_ID
+      if (!key_id) throw Object.assign(new Error('Razorpay not configured'), { statusCode: 503 })
+      this._rzp = new Razorpay({ key_id, key_secret: process.env.RAZORPAY_KEY_SECRET ?? '' })
+    }
+    return this._rzp
   }
 
   /** Create a Razorpay order for a listing and persist a PENDING Order row */
