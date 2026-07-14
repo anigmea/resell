@@ -36,7 +36,7 @@ export class ListingService {
   async myListings(sellerId: string, page: number, limit: number) {
     return this.prisma.listing.findMany({
       where:   { sellerId },
-      include: { event: { select: { id: true, title: true, dateTime: true } } },
+      include: { event: { select: { id: true, title: true, dateTime: true, city: true, venue: { select: { name: true } } } } },
       orderBy: { createdAt: 'desc' },
       skip:    (page - 1) * limit,
       take:    limit,
