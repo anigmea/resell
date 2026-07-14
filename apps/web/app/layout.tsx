@@ -16,7 +16,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={outfit.variable}>
-      <body className="bg-bg text-primary font-sans">{children}</body>
+      <body className="bg-bg text-primary font-sans">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent focus:text-black focus:rounded-lg focus:text-[0.8rem] focus:font-bold focus:no-underline"
+        >
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   )
 }

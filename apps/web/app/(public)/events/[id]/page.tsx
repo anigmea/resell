@@ -89,6 +89,7 @@ export default async function EventPage({
     <div className="min-h-screen bg-bg">
       <Nav backHref="/" backLabel="Events" />
 
+      <main id="main">
       {/* Hero */}
       <div className="px-4 md:px-8 pt-6 md:pt-8 border-b border-border">
         <div className={`w-full h-28 md:h-40 rounded-[10px] mb-5 md:mb-6 flex items-center justify-center text-4xl md:text-5xl bg-gradient-to-br ${gradient}`}>
@@ -103,7 +104,7 @@ export default async function EventPage({
             {d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>
-        <h1 className="text-[1.6rem] md:text-[2rem] font-extrabold text-primary leading-[1.1] tracking-tighter2 mb-1">
+        <h1 className="text-[1.6rem] md:text-[2rem] font-extrabold text-primary leading-[1.1] tracking-tighter2 mb-1 [text-wrap:balance]">
           {event.title}
         </h1>
         <p className="text-[0.8rem] text-muted mb-5 md:mb-6">{event.venue.name}, {event.city}</p>
@@ -114,10 +115,10 @@ export default async function EventPage({
             <Link
               key={t.key}
               href={`/events/${event.id}?tab=${t.key}${sort !== 'price-asc' ? `&sort=${sort}` : ''}`}
-              className={`text-[0.73rem] font-medium py-[0.7rem] px-4 md:px-5 border-b-2 no-underline whitespace-nowrap transition-colors ${
+              className={`text-[0.73rem] font-medium min-h-[44px] inline-flex items-center px-4 md:px-5 border-b-2 no-underline whitespace-nowrap transition-colors ${
                 tab === t.key
                   ? 'text-accent border-accent'
-                  : 'text-disabled border-transparent hover:text-secondary'
+                  : 'text-muted border-transparent hover:text-secondary'
               }`}
             >
               {t.label}
@@ -147,7 +148,7 @@ export default async function EventPage({
                       <Link
                         key={s.key}
                         href={`/events/${event.id}?tab=tickets&sort=${s.key}`}
-                        className={`text-[0.65rem] px-2 py-1 rounded no-underline border transition-colors ${
+                        className={`text-[0.65rem] px-3 min-h-[44px] inline-flex items-center rounded no-underline border transition-colors ${
                           sort === s.key
                             ? 'border-accent/40 text-accent bg-accent/5'
                             : 'border-[#1e1e1e] text-muted hover:border-[#333] hover:text-secondary'
@@ -198,7 +199,7 @@ export default async function EventPage({
               <p className="text-muted text-[0.85rem] mb-2">No tickets listed yet.</p>
               {!isPast && (
                 <>
-                  <p className="text-[0.75rem] text-disabled mb-6">Have tickets for this event? List them in 2 minutes.</p>
+                  <p className="text-[0.75rem] text-muted mb-6">Have tickets for this event? List them in 2 minutes.</p>
                   <Link
                     href={`/listings/new?eventId=${event.id}&eventTitle=${encodeURIComponent(event.title)}`}
                     className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-black text-[0.83rem] font-bold px-6 py-3 rounded-lg no-underline transition-colors"
@@ -288,7 +289,7 @@ export default async function EventPage({
             </a>
           )}
           <div className="mt-6 pt-5 border-t border-border">
-            <p className="text-[0.65rem] font-bold text-muted uppercase tracking-wider mb-3">Getting there</p>
+            <p className="text-[0.78rem] font-semibold text-secondary mb-3">Getting there</p>
             <ul className="text-[0.78rem] text-muted space-y-2">
               <li>Arrive at least 30 minutes before the event starts</li>
               <li>Carry a valid government-issued ID along with your ticket</li>
@@ -297,6 +298,7 @@ export default async function EventPage({
           </div>
         </div>
       )}
+      </main>
     </div>
   )
 }

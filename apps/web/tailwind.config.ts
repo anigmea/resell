@@ -19,7 +19,7 @@ const config: Config = {
         'border-subtle': '#111111',
         primary:   '#e8e8e8',
         secondary: '#888888',
-        muted:     '#555555',
+        muted:     '#7a7a7a',
         disabled:  '#3a3a3a',
         accent: {
           DEFAULT: '#10b981',

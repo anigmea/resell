@@ -57,7 +57,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
         {/* Ticket card */}
         <div className="bg-surface border border-border rounded-xl overflow-hidden mb-6">
           <div className="px-6 py-5 border-b border-border">
-            <h2 className="text-[0.65rem] font-bold text-muted uppercase tracking-wider mb-3">Event details</h2>
+            <h2 className="text-[0.78rem] font-semibold text-secondary mb-3">Event details</h2>
             <div className="text-[1rem] font-bold text-primary mb-1">{order.listing.event.title}</div>
             <div className="text-[0.75rem] text-muted">
               {d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}

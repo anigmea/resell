@@ -99,7 +99,7 @@ export default function BuyButton({ listingId, seat, sellerName, askingPrice }: 
         onClick={handleBuy}
         disabled={loading}
         aria-label={`Buy ticket — ${seat}`}
-        className="bg-accent hover:bg-accent-hover text-black text-[0.75rem] font-bold px-4 py-[7px] rounded-md border-0 cursor-pointer transition-colors whitespace-nowrap disabled:opacity-50"
+        className="bg-accent hover:bg-accent-hover text-black text-[0.75rem] font-bold px-4 min-h-[44px] flex items-center rounded-md border-0 cursor-pointer transition-colors whitespace-nowrap disabled:opacity-50"
       >
         {loading ? '…' : 'Buy now'}
       </button>

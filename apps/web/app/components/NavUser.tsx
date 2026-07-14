@@ -79,6 +79,8 @@ export default function NavUser() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(o => !o)}
+        aria-label="Account menu"
+        aria-expanded={open}
         className="flex items-center gap-2 bg-transparent border-0 cursor-pointer group"
       >
         <div className="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center text-[0.65rem] font-bold text-accent">
@@ -96,32 +98,32 @@ export default function NavUser() {
             <p className="text-[0.62rem] text-muted capitalize">{user.role.toLowerCase()}</p>
           </div>
 
-          <Link href="/account" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+          <Link href="/account" onClick={() => setOpen(false)} className="flex items-center min-h-[44px] px-4 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
             Account
           </Link>
           {(user.role === 'SELLER' || user.role === 'ADMIN') && (
-            <Link href="/listings" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+            <Link href="/listings" onClick={() => setOpen(false)} className="flex items-center min-h-[44px] px-4 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
               My listings
             </Link>
           )}
-          <Link href="/orders" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+          <Link href="/orders" onClick={() => setOpen(false)} className="flex items-center min-h-[44px] px-4 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
             My orders
           </Link>
           {user.role === 'ADMIN' && (
             <>
-              <Link href="/admin/events" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+              <Link href="/admin/events" onClick={() => setOpen(false)} className="flex items-center min-h-[44px] px-4 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
                 Admin — Events
               </Link>
-              <Link href="/admin/listings" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+              <Link href="/admin/listings" onClick={() => setOpen(false)} className="flex items-center min-h-[44px] px-4 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
                 Admin — Listings
               </Link>
-              <Link href="/admin/users" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+              <Link href="/admin/users" onClick={() => setOpen(false)} className="flex items-center min-h-[44px] px-4 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
                 Admin — Users
               </Link>
             </>
           )}
           <div className="border-t border-border mt-1 pt-1">
-            <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-[0.75rem] text-danger hover:bg-bg bg-transparent border-0 cursor-pointer transition-colors">
+            <button onClick={handleLogout} className="w-full flex items-center min-h-[44px] text-left px-4 text-[0.75rem] text-danger hover:bg-bg bg-transparent border-0 cursor-pointer transition-colors">
               Sign out
             </button>
           </div>

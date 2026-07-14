@@ -39,7 +39,7 @@ export default function RegisterPage() {
         id={id}
         type={type} value={form[key]} onChange={set(key)}
         placeholder={placeholder} required
-        className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-disabled outline-none focus:border-accent/30 transition-colors"
+        className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-muted outline-none focus:border-accent/30 transition-colors"
       />
     </div>
   )
@@ -56,7 +56,7 @@ export default function RegisterPage() {
         <p className="text-[0.75rem] text-muted mb-6">Takes less than 2 minutes</p>
 
         {error && (
-          <div className="text-[0.75rem] text-danger bg-danger/5 border border-danger/20 rounded-lg px-4 py-3 mb-4">
+          <div role="alert" aria-live="assertive" className="text-[0.75rem] text-danger bg-danger/5 border border-danger/20 rounded-lg px-4 py-3 mb-4">
             {error}
           </div>
         )}

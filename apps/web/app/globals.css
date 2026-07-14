@@ -31,22 +31,22 @@
 
 @layer components {
   .nav-link {
-    @apply font-medium no-underline transition-colors hover:text-primary;
+    @apply font-medium no-underline transition-colors hover:text-primary text-secondary;
     font-size: 0.78rem;
-    color: #888888;
   }
-  .row-hover { position: relative; }
-  .row-hover::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 8px; bottom: 8px;
-    width: 2px;
-    background: #10b981;
-    opacity: 0;
-    border-radius: 0 2px 2px 0;
-    transition: opacity 0.12s;
-  }
-  .row-hover:hover::before { opacity: 1; }
+}
+
+/* Focus ring — brand accent, visible only on keyboard nav */
+:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Reduced-motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  .animate-blink   { animation: none; opacity: 1; }
+  .animate-ticker  { animation: none; }
 }
 
 @keyframes blink {

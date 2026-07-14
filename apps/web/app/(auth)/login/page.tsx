@@ -42,7 +42,7 @@ export default function LoginPage() {
         <p className="text-[0.75rem] text-muted mb-6">Sign in to your account to continue</p>
 
         {error && (
-          <div className="text-[0.75rem] text-danger bg-danger/5 border border-danger/20 rounded-lg px-4 py-3 mb-4">
+          <div role="alert" aria-live="assertive" className="text-[0.75rem] text-danger bg-danger/5 border border-danger/20 rounded-lg px-4 py-3 mb-4">
             {error}
           </div>
         )}
@@ -54,7 +54,7 @@ export default function LoginPage() {
               id="login-email"
               type="text" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com" required
-              className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-disabled outline-none focus:border-accent/30 transition-colors"
+              className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-muted outline-none focus:border-accent/30 transition-colors"
             />
           </div>
           <div>
@@ -63,7 +63,7 @@ export default function LoginPage() {
               id="login-password"
               type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="••••••••" required
-              className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-disabled outline-none focus:border-accent/30 transition-colors"
+              className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-muted outline-none focus:border-accent/30 transition-colors"
             />
           </div>
           <button
@@ -80,7 +80,7 @@ export default function LoginPage() {
           <hr className="flex-1 border-t border-border border-b-0 border-l-0 border-r-0" />
         </div>
 
-        <button className="w-full bg-transparent border border-[#222] text-secondary text-[0.83rem] font-medium py-3 rounded-lg cursor-pointer hover:border-[#444] hover:text-primary transition-all">
+        <button type="button" className="w-full bg-transparent border border-[#222] text-secondary text-[0.83rem] font-medium py-3 rounded-lg cursor-pointer hover:border-[#444] hover:text-primary transition-all">
           Continue with OTP →
         </button>
 

@@ -71,7 +71,7 @@ export default async function SearchPage({
               <Link
                 key={ev.id}
                 href={`/events/${ev.id}`}
-                className="row-hover flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg no-underline hover:border-accent/30 transition-colors group"
+                className="flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg no-underline hover:border-accent/30 transition-colors group"
               >
                 <div className="flex-1 min-w-0">
                   <div className="text-[0.875rem] font-semibold text-primary group-hover:text-white transition-colors mb-1">

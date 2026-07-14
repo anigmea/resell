@@ -29,7 +29,7 @@ export default async function MyOrdersPage() {
     <div className="min-h-screen bg-bg">
       <Nav />
       <div className="px-8 py-8">
-        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-8">My orders</h1>
+        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-8 [text-wrap:balance]">My orders</h1>
 
         {orders.length === 0 ? (
           <div className="text-center py-16">
@@ -40,11 +40,11 @@ export default async function MyOrdersPage() {
           <div className="flex flex-col gap-2">
             {orders.map((o) => {
               const d    = new Date(o.listing.event.dateTime)
-              const seat = [o.listing.seatSection && `Section ${o.listing.seatSection}`, o.listing.seatRow && `Row ${o.listing.seatRow}`].filter(Boolean).join(' · ') || 'GA'
+              const seat = [o.listing.seatSection && `Section ${o.listing.seatSection}`, o.listing.seatRow && `Row ${o.listing.seatRow}`].filter(Boolean).join(' · ') || 'General Admission'
               return (
-                <div key={o.id} className="flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg">
+                <Link key={o.id} href={`/orders/${o.id}`} className="flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg no-underline hover:border-accent/30 transition-colors group">
                   <div className="flex-1 min-w-0">
-                    <div className="text-[0.84rem] font-medium text-primary mb-[3px]">{o.listing.event.title}</div>
+                    <div className="text-[0.84rem] font-medium text-primary mb-[3px] group-hover:text-white transition-colors">{o.listing.event.title}</div>
                     <div className="text-[0.67rem] text-muted">
                       {seat} · {o.listing.event.venue.name} · {d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                       {' · '}Seller: {o.listing.seller.name}
@@ -54,7 +54,7 @@ export default async function MyOrdersPage() {
                   <div className="text-[0.9rem] font-bold text-accent tracking-tighter2 min-w-[80px] text-right">
                     ₹{(o.amount / 100).toLocaleString('en-IN')}
                   </div>
-                </div>
+                </Link>
               )
             })}
           </div>

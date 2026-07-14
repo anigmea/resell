@@ -47,17 +47,17 @@ export default async function MyListingsPage() {
               { label: 'Earned',   value: `₹${(stats.totalEarned / 100).toLocaleString('en-IN')}`, color: 'text-accent' },
             ].map(s => (
               <div key={s.label} className="bg-surface border border-border rounded-lg px-4 py-3">
-                <p className="text-[0.6rem] font-semibold text-muted uppercase tracking-wider mb-1">{s.label}</p>
+                <p className="text-[0.65rem] font-semibold text-muted uppercase tracking-wider mb-1">{s.label}</p>
                 <p className={`text-[1.1rem] font-extrabold tracking-tighter2 ${s.color}`}>{s.value}</p>
               </div>
             ))}
           </div>
         )}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2">My listings</h1>
+          <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 [text-wrap:balance]">My listings</h1>
           <Link
             href="/listings/new"
-            className="bg-accent hover:bg-accent-hover text-black text-[0.78rem] font-bold px-4 py-[7px] rounded-md no-underline transition-colors"
+            className="bg-accent hover:bg-accent-hover text-black text-[0.78rem] font-bold px-4 min-h-[44px] inline-flex items-center rounded-md no-underline transition-colors"
           >
             + New listing
           </Link>
@@ -74,7 +74,7 @@ export default async function MyListingsPage() {
           <div className="flex flex-col gap-2">
             {listings.map((l) => {
               const d      = new Date(l.event.dateTime)
-              const seat   = [l.seatSection && `Section ${l.seatSection}`, l.seatRow && `Row ${l.seatRow}`].filter(Boolean).join(' · ') || 'GA'
+              const seat   = [l.seatSection && `Section ${l.seatSection}`, l.seatRow && `Row ${l.seatRow}`].filter(Boolean).join(' · ') || 'General Admission'
               const isSold = ['SOLD', 'EXPIRED', 'REJECTED'].includes(l.status)
               return (
                 <div key={l.id} className="flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg">
@@ -90,7 +90,7 @@ export default async function MyListingsPage() {
                   </div>
                   <div className="flex gap-2">
                     {!isSold && (
-                      <Link href={`/listings/${l.id}/edit`} className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] py-1 hover:border-[#333] hover:text-secondary transition-all no-underline">
+                      <Link href={`/listings/${l.id}/edit`} className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] min-h-[44px] inline-flex items-center hover:border-[#333] hover:text-secondary transition-all no-underline">
                         Edit
                       </Link>
                     )}

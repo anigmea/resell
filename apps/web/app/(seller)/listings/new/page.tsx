@@ -96,7 +96,7 @@ export default function NewListingPage() {
     }
   }
 
-  const inputCls = 'w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-disabled outline-none focus:border-accent/30 transition-colors'
+  const inputCls = 'w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-3 text-[0.85rem] text-primary placeholder:text-muted outline-none focus:border-accent/30 transition-colors'
 
   return (
     <div className="min-h-screen bg-bg">
@@ -118,7 +118,7 @@ export default function NewListingPage() {
 
           {/* Event */}
           <div className="bg-surface border border-border rounded-[10px] p-5">
-            <h2 className="text-[0.7rem] font-bold text-muted uppercase tracking-wider4 mb-4">Event</h2>
+            <h2 className="text-[0.78rem] font-semibold text-secondary mb-4">Event</h2>
             <label htmlFor="event-search" className="block text-[0.72rem] font-semibold text-secondary mb-[6px]">Search event</label>
             <div className="relative" ref={dropdownRef}>
               {selectedEvent ? (
@@ -163,7 +163,7 @@ export default function NewListingPage() {
 
           {/* Seat details */}
           <div className="bg-surface border border-border rounded-[10px] p-5">
-            <h2 className="text-[0.7rem] font-bold text-muted uppercase tracking-wider4 mb-4">Seat details</h2>
+            <h2 className="text-[0.78rem] font-semibold text-secondary mb-4">Seat details</h2>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <label htmlFor="seat-section" className="block text-[0.72rem] font-semibold text-secondary mb-[6px]">Section</label>
@@ -182,7 +182,7 @@ export default function NewListingPage() {
 
           {/* Ticket file */}
           <div className="bg-surface border border-border rounded-[10px] p-5">
-            <h2 className="text-[0.7rem] font-bold text-muted uppercase tracking-wider4 mb-4">Ticket file</h2>
+            <h2 className="text-[0.78rem] font-semibold text-secondary mb-4">Ticket file</h2>
             <label
               className={`flex flex-col items-center justify-center border border-dashed rounded-lg p-8 cursor-pointer transition-colors text-center ${file ? 'border-accent/40 bg-accent/5' : 'border-[#252525] hover:border-accent/30'}`}
             >
@@ -190,7 +190,7 @@ export default function NewListingPage() {
               <p className="text-[0.78rem] text-muted">
                 {file ? file.name : 'Drop your ticket PDF or image here'}
               </p>
-              <p className="text-[0.65rem] text-disabled mt-1">PDF, PNG, JPG · Max 10MB</p>
+              <p className="text-[0.65rem] text-muted mt-1">PDF, PNG, JPG · Max 10MB</p>
               <input
                 type="file" accept=".pdf,.png,.jpg,.jpeg" className="sr-only"
                 onChange={e => setFile(e.target.files?.[0] ?? null)}
@@ -201,7 +201,7 @@ export default function NewListingPage() {
 
           {/* Pricing */}
           <div className="bg-surface border border-border rounded-[10px] p-5">
-            <h2 className="text-[0.7rem] font-bold text-muted uppercase tracking-wider4 mb-4">Pricing</h2>
+            <h2 className="text-[0.78rem] font-semibold text-secondary mb-4">Pricing</h2>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <label htmlFor="original-price" className="block text-[0.72rem] font-semibold text-secondary mb-[6px]">Original price (₹)</label>

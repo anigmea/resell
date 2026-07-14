@@ -108,7 +108,7 @@ export default function AccountPage() {
     <div className="min-h-screen bg-bg">
       <Nav />
       <div className="px-8 py-8 max-w-lg">
-        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-8">Account</h1>
+        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-8 [text-wrap:balance]">Account</h1>
 
         {/* Avatar + role */}
         <div className="flex items-center gap-4 mb-8">
@@ -123,7 +123,7 @@ export default function AccountPage() {
 
         {/* Profile form */}
         <form onSubmit={handleSaveProfile} className="bg-surface border border-border rounded-xl p-6 mb-6">
-          <h2 className="text-[0.8rem] font-bold text-secondary uppercase tracking-wider mb-5">Profile</h2>
+          <h2 className="text-[0.9rem] font-semibold text-primary mb-5">Profile</h2>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-[0.7rem] font-semibold text-muted uppercase tracking-wider">Full name</label>
@@ -168,7 +168,7 @@ export default function AccountPage() {
         {/* Become seller */}
         {!isSeller && (
           <div className="bg-surface border border-border rounded-xl p-6">
-            <h2 className="text-[0.8rem] font-bold text-secondary uppercase tracking-wider mb-1">Sell tickets</h2>
+            <h2 className="text-[0.9rem] font-semibold text-primary mb-1">Sell tickets</h2>
             <p className="text-[0.75rem] text-muted mb-5">
               List your verified tickets for resale. You need a UPI ID to receive payouts.
             </p>

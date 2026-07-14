@@ -8,22 +8,24 @@ interface NavProps {
 
 export default function Nav({ backHref, backLabel }: NavProps) {
   return (
-    <nav aria-label="Main navigation" className="flex items-center justify-between px-4 md:px-8 py-[0.85rem] border-b border-border">
-      <Link href="/" className="flex items-center no-underline">
-        <span className="text-[1.05rem] font-extrabold text-white tracking-tighter3">resell</span>
-        <span className="w-[6px] h-[6px] rounded-full bg-accent logo-glow ml-[2px] mb-[2px] inline-block" />
-      </Link>
+    <nav aria-label="Main navigation" className="border-b border-border px-4 md:px-8">
+      <div className="max-w-[1440px] mx-auto flex items-center justify-between py-[0.85rem]">
+        <Link href="/" className="flex items-center no-underline">
+          <span className="text-[1.05rem] font-extrabold text-white tracking-tighter3">resell</span>
+          <span className="w-[6px] h-[6px] rounded-full bg-accent logo-glow ml-[2px] mb-[2px] inline-block" />
+        </Link>
 
-      <div className="flex items-center gap-4 md:gap-6">
-        {backHref ? (
-          <Link href={backHref} className="nav-link"><span aria-hidden="true">← </span>{backLabel ?? 'Back'}</Link>
-        ) : (
-          <>
-            <Link href="/" className="nav-link hidden sm:inline">Browse</Link>
-            <Link href="/listings/new" className="nav-link hidden sm:inline">Sell tickets</Link>
-          </>
-        )}
-        <NavUser />
+        <div className="flex items-center gap-4 md:gap-6">
+          {backHref ? (
+            <Link href={backHref} className="nav-link"><span aria-hidden="true">← </span>{backLabel ?? 'Back'}</Link>
+          ) : (
+            <>
+              <Link href="/" className="nav-link hidden sm:inline">Browse</Link>
+              <Link href="/listings/new" className="nav-link hidden sm:inline">Sell tickets</Link>
+            </>
+          )}
+          <NavUser />
+        </div>
       </div>
     </nav>
   )

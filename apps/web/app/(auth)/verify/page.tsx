@@ -67,7 +67,7 @@ function VerifyForm() {
       </p>
 
       {error && (
-        <div className="text-[0.75rem] text-danger bg-danger/5 border border-danger/20 rounded-lg px-4 py-3 mb-4">
+        <div role="alert" aria-live="assertive" className="text-[0.75rem] text-danger bg-danger/5 border border-danger/20 rounded-lg px-4 py-3 mb-4">
           {error}
         </div>
       )}
@@ -83,7 +83,7 @@ function VerifyForm() {
           placeholder="000000"
           maxLength={6}
           required
-          className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-4 text-[1.5rem] font-bold text-primary text-center tracking-[0.3em] placeholder:text-disabled outline-none focus:border-accent/30 transition-colors"
+          className="w-full bg-bg border border-[#1e1e1e] rounded-lg px-4 py-4 text-[1.5rem] font-bold text-primary text-center tracking-[0.3em] placeholder:text-muted outline-none focus:border-accent/30 transition-colors"
         />
         <button
           type="submit" disabled={loading || otp.length < 6}

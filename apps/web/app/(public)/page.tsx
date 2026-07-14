@@ -60,6 +60,7 @@ export default async function HomePage({
     <div className="min-h-screen bg-bg">
       <Nav />
 
+      <main id="main">
       {/* Ticker */}
       <div className="bg-[#0a0a0a] border-b border-border px-4 md:px-8 py-[0.4rem] flex items-center gap-3 overflow-hidden">
         <div className="flex items-center gap-[0.4rem] text-[0.6rem] font-bold text-accent uppercase tracking-wider4 whitespace-nowrap">
@@ -90,7 +91,7 @@ export default async function HomePage({
             </div>
             <h1 className="text-[2.8rem] md:text-[4.5rem] font-black leading-[0.92] tracking-tighter4 text-primary mb-4">
               Tickets for<br />
-              <span className="bg-gradient-to-r from-accent to-[#34d399] bg-clip-text text-transparent">
+              <span className="text-accent">
                 live India.
               </span>
             </h1>
@@ -121,15 +122,21 @@ export default async function HomePage({
           action="/search"
           className="flex flex-col sm:flex-row items-stretch border border-[#1e1e1e] rounded-[10px] overflow-hidden bg-surface relative z-10 focus-within:border-accent/30 transition-colors"
         >
+          <label htmlFor="search-q" className="sr-only">Search events</label>
           <input
+            id="search-q"
             name="q"
-            type="text"
+            type="search"
             placeholder="Search events, artists, teams…"
-            className="flex-1 bg-transparent border-none outline-none text-[0.875rem] text-primary placeholder:text-disabled px-5 py-[0.9rem]"
+            aria-label="Search events"
+            className="flex-1 bg-transparent border-none outline-none text-[0.875rem] text-primary placeholder:text-muted px-5 py-[0.9rem]"
           />
           <div className="hidden sm:block w-px bg-[#1e1e1e] my-[0.6rem]" />
+          <label htmlFor="search-city" className="sr-only">Filter by city</label>
           <select
+            id="search-city"
             name="city"
+            aria-label="Filter by city"
             className="bg-transparent border-none border-t border-[#1e1e1e] sm:border-t-0 outline-none text-[0.8rem] text-secondary px-5 py-3 sm:py-0 cursor-pointer appearance-none"
             defaultValue={city ?? ''}
           >
@@ -160,7 +167,7 @@ export default async function HomePage({
               key={cat}
               href={cat === 'All' ? '/' : `/?category=${catValue}`}
               data-active={isActive ? 'true' : undefined}
-              className="text-[0.73rem] font-medium text-disabled px-4 py-3 whitespace-nowrap border-b-2 border-transparent no-underline hover:text-secondary transition-colors data-[active=true]:text-accent data-[active=true]:border-accent"
+              className="text-[0.73rem] font-medium text-muted px-4 min-h-[44px] inline-flex items-center whitespace-nowrap border-b-2 border-transparent no-underline hover:text-secondary transition-colors data-[active=true]:text-accent data-[active=true]:border-accent"
             >
               {cat}
             </Link>
@@ -171,9 +178,9 @@ export default async function HomePage({
       {/* Featured */}
       {featured.length > 0 && (
         <>
-          <div className="flex items-center gap-3 px-4 md:px-8 pt-5 pb-3">
-            <h2 className="text-[0.6rem] font-bold text-muted uppercase tracking-wider4 whitespace-nowrap">In demand</h2>
-            <hr className="flex-1 border-none border-t border-border" style={{ borderTopWidth: 1 }} />
+          <div className="flex items-center gap-3 px-4 md:px-8 pt-6 pb-3">
+            <h2 className="text-[0.78rem] font-semibold text-secondary whitespace-nowrap">In demand</h2>
+            <span className="flex-1 h-px bg-border" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border border-t border-b border-border">
             {featured.map((ev) => {
@@ -188,7 +195,7 @@ export default async function HomePage({
                   <div className="flex gap-2 mb-2 flex-wrap">
                     <Badge variant="category">{ev.category}</Badge>
                   </div>
-                  <div className="text-[0.875rem] font-semibold text-primary leading-snug mb-1 group-hover:text-white transition-colors">
+                  <div className="text-[0.875rem] font-semibold text-primary leading-snug mb-1 group-hover:text-white transition-colors line-clamp-2">
                     {ev.title}
                   </div>
                   <div className="text-[0.68rem] text-muted mb-3">
@@ -199,7 +206,7 @@ export default async function HomePage({
                       {ev.minPrice ? `₹${(ev.minPrice / 100).toLocaleString('en-IN')}+` : 'View tickets'}
                     </span>
                     {ev._count?.listings != null && (
-                      <span className="text-[0.63rem] text-disabled">{ev._count.listings} listings</span>
+                      <span className="text-[0.63rem] text-muted">{ev._count.listings} listings</span>
                     )}
                   </div>
                 </Link>
@@ -211,10 +218,10 @@ export default async function HomePage({
 
       {/* All events */}
       <div className="flex items-center gap-3 px-4 md:px-8 pt-5 pb-3">
-        <h2 className="text-[0.6rem] font-bold text-muted uppercase tracking-wider4 whitespace-nowrap">
+        <h2 className="text-[0.78rem] font-semibold text-secondary whitespace-nowrap">
           All events{city ? ` · ${city}` : ''}
         </h2>
-        <hr className="flex-1 border-t border-border border-b-0 border-l-0 border-r-0" />
+        <span className="flex-1 h-px bg-border" />
       </div>
 
       {events.length === 0 ? (
@@ -224,7 +231,7 @@ export default async function HomePage({
           {/* Table header — hidden on mobile */}
           <div className="hidden md:grid grid-cols-[56px_1fr_120px_90px] px-8 py-[0.45rem] border-b border-border-subtle">
             {['Date', 'Event', 'Venue', 'From'].map((h, i) => (
-              <span key={i} className={`text-[0.58rem] font-semibold text-disabled uppercase tracking-wider3 ${i === 3 ? 'text-right' : ''}`}>
+              <span key={i} className={`text-[0.58rem] font-semibold text-muted uppercase tracking-wider3 ${i === 3 ? 'text-right' : ''}`}>
                 {h}
               </span>
             ))}
@@ -274,7 +281,7 @@ export default async function HomePage({
                       {ev.minPrice ? `₹${(ev.minPrice / 100).toLocaleString('en-IN')}` : '—'}
                     </div>
                     {ev._count?.listings != null && (
-                      <div className={`text-[0.62rem] mt-[2px] ${scarce ? 'text-danger/50' : 'text-disabled'}`}>
+                      <div className={`text-[0.62rem] mt-[2px] ${scarce ? 'text-danger/50' : 'text-muted'}`}>
                         {scarce ? `${ev._count.listings} left` : `${ev._count.listings} listings`}
                       </div>
                     )}
@@ -285,6 +292,8 @@ export default async function HomePage({
           })}
         </>
       )}
+
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-border mt-12 px-4 md:px-8 py-8">

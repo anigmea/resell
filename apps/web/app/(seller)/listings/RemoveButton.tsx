@@ -23,7 +23,7 @@ export default function RemoveButton({ listingId }: { listingId: string }) {
     <button
       onClick={handleRemove}
       disabled={loading}
-      className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] py-1 cursor-pointer hover:border-danger/40 hover:text-danger transition-all disabled:opacity-30"
+      className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] min-h-[44px] flex items-center cursor-pointer hover:border-danger/40 hover:text-danger transition-all disabled:opacity-30"
     >
       {loading ? '…' : 'Remove'}
     </button>
