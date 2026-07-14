@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "nodePackages.pnpm"]
+
+[phases.install]
+cmds = [
+  "pnpm install --frozen-lockfile",
+  "pnpm --filter @resell/db exec prisma generate",
+]
+
+[start]
+cmd = "pnpm --filter @resell/api exec tsx src/index.ts"

@@ -2,6 +2,7 @@
 import Nav from '../../../components/Nav'
 import Badge from '../../../components/Badge'
 import { apiFetch } from '../../../../lib/api'
+import BuyButton from './BuyButton'
 
 type Listing = {
   id: string; askingPrice: number; originalPrice: number;
@@ -120,12 +121,12 @@ export default async function EventPage({ params }: { params: { id: string } }) 
                     ₹{(l.originalPrice / 100).toLocaleString('en-IN')}
                   </div>
                 </div>
-                <button
-                  className="bg-accent hover:bg-accent-hover text-black text-[0.75rem] font-bold px-4 py-[7px] rounded-md border-0 cursor-pointer transition-colors whitespace-nowrap"
-                  aria-label={`Buy ticket — ${seat}`}
-                >
-                  Buy now
-                </button>
+                <BuyButton
+                  listingId={l.id}
+                  seat={seat}
+                  sellerName={l.seller.name}
+                  askingPrice={l.askingPrice}
+                />
               </div>
             )
           })}
