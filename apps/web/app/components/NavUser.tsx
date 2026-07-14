@@ -79,6 +79,9 @@ export default function NavUser() {
             <p className="text-[0.62rem] text-muted capitalize">{user.role.toLowerCase()}</p>
           </div>
 
+          <Link href="/account" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+            Account
+          </Link>
           {(user.role === 'SELLER' || user.role === 'ADMIN') && (
             <Link href="/listings" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
               My listings

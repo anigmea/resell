@@ -23,6 +23,19 @@ const userRoutes: FastifyPluginAsync = async (fastify) => {
     })
   })
 
+  fastify.post('/me/become-seller', { preHandler: verifyJwt }, async (req, reply) => {
+    const user = await fastify.prisma.user.findUnique({ where: { id: req.user.id } })
+    if (!user) return reply.status(404).send({ error: 'User not found' })
+    if (user.role !== 'BUYER') return reply.status(400).send({ error: 'Already a seller or admin' })
+    const { upiId } = (req.body ?? {}) as { upiId?: string }
+    if (!upiId?.trim()) return reply.status(400).send({ error: 'UPI ID is required to become a seller' })
+    return fastify.prisma.user.update({
+      where:  { id: req.user.id },
+      data:   { role: 'SELLER', upiId: upiId.trim() },
+      select: { id: true, name: true, role: true, upiId: true },
+    })
+  })
+
   fastify.get('/me/listings', { preHandler: verifyJwt }, async (req) => {
     const page  = Number((req.query as any).page  ?? 1)
     const limit = Number((req.query as any).limit ?? 20)
