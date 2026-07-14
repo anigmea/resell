@@ -17,14 +17,31 @@ export default function NavUser() {
   const [checked, setChecked] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const token = getCookie('accessToken')
-    if (!token) { setChecked(true); return }
-    fetch(`${API}/users/me`, {
+  async function fetchMe(token: string) {
+    const r = await fetch(`${API}/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include',
     })
-      .then(r => r.ok ? r.json() : null)
+    if (r.ok) return r.json() as Promise<User>
+    // token may be expired — try silent refresh
+    if (r.status === 401) {
+      const rr = await fetch(`${API}/auth/refresh`, { method: 'POST', credentials: 'include' }).catch(() => null)
+      if (rr?.ok) {
+        const { accessToken } = await rr.json()
+        const r2 = await fetch(`${API}/users/me`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          credentials: 'include',
+        })
+        if (r2.ok) return r2.json() as Promise<User>
+      }
+    }
+    return null
+  }
+
+  useEffect(() => {
+    const token = getCookie('accessToken')
+    if (!token) { setChecked(true); return }
+    fetchMe(token)
       .then(u => { setUser(u); setChecked(true) })
       .catch(() => setChecked(true))
   }, [])
