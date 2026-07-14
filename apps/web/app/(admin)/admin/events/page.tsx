@@ -1,7 +1,9 @@
 // apps/web/app/(admin)/admin/events/page.tsx
+import Link from 'next/link'
 import Nav from '../../../components/Nav'
 import Badge from '../../../components/Badge'
 import { apiFetch } from '../../../../lib/api'
+import EventActions from './EventActions'
 
 type AdminEvent = {
   id: string; title: string; city: string; dateTime: string;
@@ -31,9 +33,9 @@ export default async function AdminEventsPage() {
       <div className="px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2">Events</h1>
-          <button className="bg-accent hover:bg-accent-hover text-black text-[0.78rem] font-bold px-4 py-[7px] rounded-md border-0 cursor-pointer transition-colors">
+          <Link href="/admin/events/new" className="bg-accent hover:bg-accent-hover text-black text-[0.78rem] font-bold px-4 py-[7px] rounded-md no-underline transition-colors">
             + Create event
-          </button>
+          </Link>
         </div>
 
         <div className="border border-border rounded-lg overflow-hidden">
@@ -58,14 +60,7 @@ export default async function AdminEventsPage() {
                 </div>
                 <div className="text-[0.72rem] text-secondary">{ev.category}</div>
                 <Badge variant={EVENT_STATUS_VARIANT[ev.status] ?? 'sold'}>{EVENT_STATUS_LABEL[ev.status] ?? ev.status}</Badge>
-                <div className="flex gap-2">
-                  <button className="text-[0.62rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded px-2 py-[3px] cursor-pointer hover:text-primary hover:border-[#333] transition-all">
-                    Edit
-                  </button>
-                  <button className="text-[0.62rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded px-2 py-[3px] cursor-pointer hover:text-danger hover:border-danger/30 transition-all">
-                    Cancel
-                  </button>
-                </div>
+                <EventActions eventId={ev.id} status={ev.status} />
               </div>
             )
           })}

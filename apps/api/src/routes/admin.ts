@@ -17,6 +17,10 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
   const eventSvc = new EventService(fastify.prisma)
   const guard = [verifyJwt, requireRole('ADMIN')]
 
+  fastify.get('/venues', { preHandler: guard }, async () => {
+    return fastify.prisma.venue.findMany({ orderBy: { name: 'asc' } })
+  })
+
   fastify.post('/venues', { preHandler: guard }, async (req, reply) => {
     const body  = CreateVenueSchema.parse(req.body)
     const venue = await fastify.prisma.venue.create({ data: body })
