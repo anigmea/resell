@@ -32,8 +32,8 @@ export default async function AdminEventsPage() {
       <Nav />
       <div className="px-8 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2">Events</h1>
-          <Link href="/admin/events/new" className="bg-accent hover:bg-accent-hover text-black text-[0.78rem] font-bold px-4 py-[7px] rounded-md no-underline transition-colors">
+          <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 [text-wrap:balance]">Events</h1>
+          <Link href="/admin/events/new" className="bg-accent hover:bg-accent-hover text-black text-[0.78rem] font-bold px-4 min-h-[44px] inline-flex items-center rounded-md no-underline transition-colors">
             + Create event
           </Link>
         </div>
@@ -41,7 +41,7 @@ export default async function AdminEventsPage() {
         <div className="border border-border rounded-lg overflow-hidden">
           <div className="grid grid-cols-[1fr_100px_120px_100px_80px_100px] px-4 py-3 border-b border-border bg-surface">
             {['Event', 'City', 'Date', 'Category', 'Status', 'Actions'].map((h, i) => (
-              <span key={i} className="text-[0.58rem] font-semibold text-disabled uppercase tracking-wider3">{h}</span>
+              <span key={i} className="text-[0.58rem] font-semibold text-muted uppercase tracking-wider3">{h}</span>
             ))}
           </div>
           {events.length === 0 ? (

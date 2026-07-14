@@ -64,19 +64,19 @@ export default function AdminUsersPage() {
       <Nav />
       <div className="px-4 md:px-8 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2">Users</h1>
+          <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 [text-wrap:balance]">Users</h1>
           <div className="flex gap-2 flex-wrap">
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search name or email…"
-              className="bg-surface border border-border text-primary rounded-lg px-3 py-2 text-[0.8rem] outline-none focus:border-accent transition-colors w-48"
+              className="bg-surface border border-border text-primary rounded-lg px-3 py-2 text-[0.8rem] outline-none focus:border-accent transition-colors w-48 placeholder:text-muted"
             />
             {(['', 'BUYER', 'SELLER', 'ADMIN'] as const).map(r => (
               <button
                 key={r}
                 onClick={() => setFilter(r)}
-                className={`text-[0.72rem] font-semibold px-3 py-2 rounded-lg border transition-colors ${
+                className={`text-[0.72rem] font-semibold px-3 min-h-[44px] rounded-lg border transition-colors ${
                   filter === r
                     ? 'bg-accent text-black border-accent'
                     : 'bg-transparent border-border text-muted hover:border-[#333] hover:text-secondary'
@@ -96,7 +96,7 @@ export default function AdminUsersPage() {
           <div className="border border-border rounded-lg overflow-hidden">
             <div className="hidden md:grid grid-cols-[1fr_180px_80px_80px_80px_80px_120px] px-4 py-3 border-b border-border bg-surface">
               {['User', 'Email', 'Role', 'KYC', 'Listings', 'Orders', 'Change role'].map((h, i) => (
-                <span key={i} className="text-[0.58rem] font-semibold text-disabled uppercase tracking-wider3">{h}</span>
+                <span key={i} className="text-[0.58rem] font-semibold text-muted uppercase tracking-wider3">{h}</span>
               ))}
             </div>
 

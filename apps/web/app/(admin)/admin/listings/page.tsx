@@ -32,7 +32,7 @@ export default async function AdminListingsPage({
     <div className="min-h-screen bg-bg">
       <Nav />
       <div className="px-8 py-8">
-        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-6">Listing Verification Queue</h1>
+        <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2 mb-6 [text-wrap:balance]">Listing Verification Queue</h1>
 
         <div className="flex border-b border-border mb-6">
           {FILTER_TABS.map((tab) => {
@@ -42,7 +42,7 @@ export default async function AdminListingsPage({
                 key={tab}
                 href={tab === 'All' ? '/admin/listings' : `/admin/listings?status=${tab}`}
                 className={`text-[0.73rem] font-medium px-4 py-3 no-underline whitespace-nowrap border-b-2 transition-colors ${
-                  isActive ? 'text-accent border-accent' : 'text-disabled border-transparent hover:text-secondary'
+                  isActive ? 'text-accent border-accent' : 'text-muted border-transparent hover:text-secondary'
                 }`}
               >
                 {tab}
@@ -55,7 +55,7 @@ export default async function AdminListingsPage({
           {listings.length === 0 ? (
             <p className="text-muted text-sm py-8 text-center">No listings in this queue.</p>
           ) : listings.map((l) => {
-            const seat      = [l.seatSection && `Section ${l.seatSection}`, l.seatRow && `Row ${l.seatRow}`, l.seatNumber && `Seat ${l.seatNumber}`].filter(Boolean).join(' · ') || 'GA'
+            const seat      = [l.seatSection && `Section ${l.seatSection}`, l.seatRow && `Row ${l.seatRow}`, l.seatNumber && `Seat ${l.seatNumber}`].filter(Boolean).join(' · ') || 'General Admission'
             const isPending = l.status === 'PENDING_VERIFICATION'
             return (
               <div key={l.id} className="flex items-center gap-4 px-4 py-4 bg-surface border border-border rounded-lg">
