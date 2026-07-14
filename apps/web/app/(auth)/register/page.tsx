@@ -24,7 +24,7 @@ export default function RegisterPage() {
         const body = await res.json().catch(() => ({}))
         throw new Error(body.error ?? 'Registration failed')
       }
-      window.location.href = '/verify'
+      window.location.href = `/verify?phone=${encodeURIComponent(form.phone)}`
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Registration failed')
     } finally {

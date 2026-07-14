@@ -12,17 +12,24 @@ export class AuthService {
 
   async register(input: RegisterInput) {
     const passwordHash = await bcrypt.hash(input.password, 12)
+    let user: { id: string; name: string; email: string; phone: string; role: string }
     try {
-      const user = await this.prisma.user.create({
+      user = await this.prisma.user.create({
         data: { name: input.name, email: input.email, phone: input.phone, passwordHash },
-        select: { id: true, name: true, email: true, phone: true, role: true,
-                  kycStatus: true, phoneVerified: true, createdAt: true },
+        select: { id: true, name: true, email: true, phone: true, role: true },
       })
-      return user
     } catch (err: any) {
       if (err?.code === 'P2002') throw new Error('Email or phone already registered')
       throw err
     }
+    // Issue tokens immediately so the verify-phone page can call /auth/otp/verify
+    const payload = { sub: user.id, role: user.role }
+    const accessToken  = jwt.sign(payload, ACCESS_SECRET,  { expiresIn: '15m' })
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET, { expiresIn: '30d' })
+    await this.redis.set(`refresh:${user.id}`, refreshToken, 'EX', 60 * 60 * 24 * 30)
+    // Auto-send OTP to registered phone
+    await this.sendOtp(input.phone)
+    return { accessToken, refreshToken, user }
   }
 
   async login(input: LoginInput) {
@@ -79,7 +86,7 @@ export class AuthService {
     await this.redis.del(`otp:${phone}`)
     await this.prisma.user.update({
       where: { phone },
-      data:  { phoneVerified: true, role: 'SELLER' },
+      data:  { phoneVerified: true },
     })
     return { verified: true }
   }

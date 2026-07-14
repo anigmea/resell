@@ -10,8 +10,15 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
   fastify.post('/register', async (req, reply) => {
     const body = RegisterSchema.parse(req.body)
-    const user = await svc.register(body)
-    return reply.status(201).send({ user })
+    const { accessToken, refreshToken, user } = await svc.register(body)
+    const isProd = process.env.NODE_ENV === 'production'
+    reply.setCookie('refreshToken', refreshToken, {
+      httpOnly: true, secure: isProd, sameSite: 'lax', path: '/',
+    })
+    reply.setCookie('accessToken', accessToken, {
+      httpOnly: false, secure: isProd, sameSite: 'lax', path: '/', maxAge: 60 * 15,
+    })
+    return reply.status(201).send({ accessToken, user })
   })
 
   fastify.post('/login', async (req, reply) => {
