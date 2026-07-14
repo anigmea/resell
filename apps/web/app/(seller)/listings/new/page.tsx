@@ -1,17 +1,38 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Nav from '../../../components/Nav'
 
 const PLATFORM_FEE = 0.05
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'
+
+type EventOption = { id: string; title: string; dateTime: string; city: string }
 
 export default function NewListingPage() {
   const [form, setForm] = useState({
-    eventSearch: '', section: '', row: '', seatNumber: '',
+    section: '', row: '', seatNumber: '',
     originalPrice: '', askingPrice: '',
   })
+  const [eventQuery,    setEventQuery]    = useState('')
+  const [eventOptions,  setEventOptions]  = useState<EventOption[]>([])
+  const [selectedEvent, setSelectedEvent] = useState<EventOption | null>(null)
+  const [showDropdown,  setShowDropdown]  = useState(false)
   const [file, setFile]       = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (eventQuery.length < 2) { setEventOptions([]); return }
+    const t = setTimeout(async () => {
+      try {
+        const res  = await fetch(`${API}/search?q=${encodeURIComponent(eventQuery)}`)
+        const data = await res.json()
+        setEventOptions(data.slice(0, 6))
+        setShowDropdown(true)
+      } catch { setEventOptions([]) }
+    }, 300)
+    return () => clearTimeout(t)
+  }, [eventQuery])
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
@@ -22,26 +43,32 @@ export default function NewListingPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!selectedEvent) { setError('Please select an event.'); return }
     if (!file) { setError('Please upload your ticket file.'); return }
     setLoading(true); setError('')
     try {
-      const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'}/listings/upload-url`, {
+      // For local dev without R2, use a placeholder URL
+      let fileUrl = `https://placeholder.resell.in/tickets/${Date.now()}-${file.name}`
+      const uploadRes = await fetch(`${API}/listings/upload-url`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ filename: file.name, contentType: file.type }),
-      })
-      if (!uploadRes.ok) throw new Error('Failed to get upload URL')
-      const { uploadUrl, fileUrl } = await uploadRes.json()
+      }).catch(() => null)
 
-      const putRes = await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
-      if (!putRes.ok) throw new Error('Failed to upload ticket file')
+      if (uploadRes?.ok) {
+        const { uploadUrl, fileUrl: url } = await uploadRes.json()
+        const putRes = await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
+        if (!putRes.ok) throw new Error('Failed to upload ticket file')
+        fileUrl = url
+      }
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'}/listings`, {
+      const res = await fetch(`${API}/listings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
+          eventId:       selectedEvent.id,
           seatSection:   form.section    || undefined,
           seatRow:       form.row        || undefined,
           seatNumber:    form.seatNumber || undefined,
@@ -86,12 +113,45 @@ export default function NewListingPage() {
           <div className="bg-surface border border-border rounded-[10px] p-5">
             <h2 className="text-[0.7rem] font-bold text-muted uppercase tracking-wider4 mb-4">Event</h2>
             <label htmlFor="event-search" className="block text-[0.72rem] font-semibold text-secondary mb-[6px]">Search event</label>
-            <input
-              id="event-search"
-              type="text" value={form.eventSearch} onChange={set('eventSearch')}
-              placeholder="e.g. Coldplay, IPL, Zakir Khan…" required
-              className={inputCls}
-            />
+            <div className="relative" ref={dropdownRef}>
+              {selectedEvent ? (
+                <div className="flex items-center justify-between bg-bg border border-accent/30 rounded-lg px-4 py-3">
+                  <div>
+                    <div className="text-[0.85rem] font-medium text-primary">{selectedEvent.title}</div>
+                    <div className="text-[0.65rem] text-muted">{selectedEvent.city} · {new Date(selectedEvent.dateTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                  </div>
+                  <button type="button" onClick={() => { setSelectedEvent(null); setEventQuery('') }} className="text-[0.65rem] text-muted hover:text-danger bg-transparent border-0 cursor-pointer">✕</button>
+                </div>
+              ) : (
+                <>
+                  <input
+                    id="event-search"
+                    type="text"
+                    value={eventQuery}
+                    onChange={e => setEventQuery(e.target.value)}
+                    onFocus={() => eventOptions.length > 0 && setShowDropdown(true)}
+                    placeholder="e.g. Coldplay, IPL, Zakir Khan…"
+                    required={!selectedEvent}
+                    className={inputCls}
+                  />
+                  {showDropdown && eventOptions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 z-10 mt-1 bg-surface border border-border rounded-lg overflow-hidden shadow-lg">
+                      {eventOptions.map(ev => (
+                        <button
+                          key={ev.id}
+                          type="button"
+                          onClick={() => { setSelectedEvent(ev); setShowDropdown(false); setEventQuery('') }}
+                          className="w-full text-left px-4 py-3 hover:bg-bg transition-colors border-0 bg-transparent cursor-pointer border-b border-border last:border-0"
+                        >
+                          <div className="text-[0.82rem] font-medium text-primary">{ev.title}</div>
+                          <div className="text-[0.65rem] text-muted">{ev.city} · {new Date(ev.dateTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
 
           {/* Seat details */}

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Nav from '../../../components/Nav'
 import Badge from '../../../components/Badge'
 import { apiFetch } from '../../../../lib/api'
+import ListingActions from './ListingActions'
 
 type AdminListing = {
   id: string; askingPrice: number; originalPrice: number; status: string;
@@ -76,16 +77,7 @@ export default async function AdminListingsPage({
                 <Badge variant={l.status === 'ACTIVE' ? 'active' : l.status === 'PENDING_VERIFICATION' ? 'pending' : 'sold'}>
                   {l.status === 'PENDING_VERIFICATION' ? 'Pending' : l.status}
                 </Badge>
-                {isPending && (
-                  <div className="flex gap-2 flex-shrink-0">
-                    <button className="text-[0.65rem] font-bold bg-accent/10 border border-accent/30 text-accent rounded-md px-3 py-[5px] cursor-pointer hover:bg-accent/20 transition-colors">
-                      Approve
-                    </button>
-                    <button className="text-[0.65rem] font-bold bg-danger/5 border border-danger/20 text-danger rounded-md px-3 py-[5px] cursor-pointer hover:bg-danger/10 transition-colors">
-                      Reject
-                    </button>
-                  </div>
-                )}
+                {isPending && <ListingActions listingId={l.id} />}
               </div>
             )
           })}

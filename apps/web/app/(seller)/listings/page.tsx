@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Nav from '../../components/Nav'
 import Badge from '../../components/Badge'
 import { apiFetch } from '../../../lib/api'
+import RemoveButton from './RemoveButton'
 
 type MyListing = {
   id: string; askingPrice: number; status: string;
@@ -71,9 +72,7 @@ export default async function MyListingsPage() {
                     <button className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] py-1 cursor-pointer hover:border-[#333] hover:text-secondary transition-all disabled:opacity-30" disabled={isSold}>
                       Edit
                     </button>
-                    <button className="text-[0.65rem] font-semibold bg-transparent border border-[#1e1e1e] text-muted rounded-md px-[10px] py-1 cursor-pointer hover:border-danger/40 hover:text-danger transition-all disabled:opacity-30" disabled={isSold}>
-                      Remove
-                    </button>
+                    {!isSold && <RemoveButton listingId={l.id} />}
                   </div>
                 </div>
               )
