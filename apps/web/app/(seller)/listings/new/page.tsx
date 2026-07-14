@@ -53,7 +53,7 @@ export default function NewListingPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        body: JSON.stringify({ mimeType: file.type }),
       }).catch(() => null)
 
       if (uploadRes?.ok) {
