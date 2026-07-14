@@ -51,13 +51,29 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     return { ...listing, reason }
   })
 
-  fastify.get('/listings/pending', { preHandler: guard }, async (req) => {
-    const page  = Number((req.query as any).page  ?? 1)
-    const limit = Number((req.query as any).limit ?? 20)
+  fastify.get('/listings', { preHandler: guard }, async (req) => {
+    const page   = Number((req.query as any).page   ?? 1)
+    const limit  = Number((req.query as any).limit  ?? 50)
+    const status = (req.query as any).status as string | undefined
+    const where  = status ? { status: status as any } : {}
     return fastify.prisma.listing.findMany({
-      where:   { status: 'PENDING_VERIFICATION' },
-      include: { event: { select: { title: true } }, seller: { select: { id: true, name: true } } },
+      where,
+      include: {
+        event:  { select: { title: true, dateTime: true } },
+        seller: { select: { id: true, name: true, email: true } },
+      },
       orderBy: { createdAt: 'asc' },
+      skip:    (page - 1) * limit,
+      take:    limit,
+    })
+  })
+
+  fastify.get('/events', { preHandler: guard }, async (req) => {
+    const page  = Number((req.query as any).page  ?? 1)
+    const limit = Number((req.query as any).limit ?? 50)
+    return fastify.prisma.event.findMany({
+      include: { venue: { select: { name: true } } },
+      orderBy: { dateTime: 'desc' },
       skip:    (page - 1) * limit,
       take:    limit,
     })

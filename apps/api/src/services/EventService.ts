@@ -11,13 +11,25 @@ export class EventService {
     if (filters.date)     where.dateTime = { gte: new Date(filters.date) }
     if (filters.q)        where.title    = { contains: filters.q, mode: 'insensitive' }
 
-    return this.prisma.event.findMany({
+    const events = await this.prisma.event.findMany({
       where,
-      include: { venue: true },
+      include: {
+        venue: true,
+        listings: {
+          where:   { status: 'ACTIVE' },
+          orderBy: { askingPrice: 'asc' },
+          take:    1,
+          select:  { askingPrice: true },
+        },
+      },
       orderBy: { dateTime: 'asc' },
       skip:    (filters.page - 1) * filters.limit,
       take:    filters.limit,
     })
+    return events.map(({ listings, ...ev }) => ({
+      ...ev,
+      minPrice: listings[0]?.askingPrice ?? null,
+    }))
   }
 
   async getById(id: string) {

@@ -34,7 +34,14 @@ const userRoutes: FastifyPluginAsync = async (fastify) => {
     const limit = Number((req.query as any).limit ?? 20)
     return fastify.prisma.order.findMany({
       where:   { buyerId: req.user.id },
-      include: { listing: { include: { event: { select: { id: true, title: true, dateTime: true } } } } },
+      include: {
+        listing: {
+          include: {
+            event:  { include: { venue: { select: { name: true } } } },
+            seller: { select: { id: true, name: true } },
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
       skip:    (page - 1) * limit,
       take:    limit,
