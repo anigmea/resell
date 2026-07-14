@@ -38,7 +38,16 @@ export default async function SearchPage({
             autoFocus
             className="flex-1 bg-surface border border-border rounded-lg px-4 py-3 text-[0.875rem] text-primary placeholder:text-disabled outline-none focus:border-accent/30 transition-colors"
           />
-          {city && <input type="hidden" name="city" value={city} />}
+          <select
+            name="city"
+            defaultValue={city ?? ''}
+            className="bg-surface border border-border rounded-lg px-3 text-[0.8rem] text-secondary outline-none cursor-pointer"
+          >
+            <option value="">All cities</option>
+            {['Mumbai','Delhi','Bengaluru','Hyderabad','Chennai','Pune'].map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
           <button
             type="submit"
             className="bg-accent hover:bg-accent-hover text-black text-[0.82rem] font-bold px-5 rounded-lg border-0 cursor-pointer transition-colors"

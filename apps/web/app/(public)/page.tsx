@@ -134,7 +134,10 @@ export default async function HomePage({
             <option value="">All cities</option>
             <option value="Mumbai">Mumbai</option>
             <option value="Delhi">Delhi</option>
-            <option value="Bangalore">Bangalore</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Pune">Pune</option>
           </select>
           <button
             type="submit"
