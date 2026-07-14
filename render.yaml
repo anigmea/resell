@@ -2,7 +2,7 @@ services:
   - type: web
     name: resell-api
     runtime: node
-    buildCommand: pnpm install --frozen-lockfile --prod=false && pnpm --filter @resell/db exec prisma generate
+    buildCommand: pnpm install --frozen-lockfile --prod=false && pnpm --filter @resell/db exec prisma generate && pnpm --filter @resell/db exec prisma migrate deploy
     startCommand: pnpm --filter @resell/api exec tsx src/index.ts
     plan: free
     region: singapore
