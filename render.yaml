@@ -12,6 +12,8 @@ services:
         value: production
       - key: PORT
         value: "4000"
+      - key: WEB_URL
+        value: "https://resell-web.vercel.app"
       - key: DATABASE_URL
         sync: false
       - key: REDIS_URL

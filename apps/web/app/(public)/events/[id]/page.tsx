@@ -1,8 +1,24 @@
 // apps/web/app/(public)/events/[id]/page.tsx
+import type { Metadata } from 'next'
 import Nav from '../../../components/Nav'
 import Badge from '../../../components/Badge'
 import { apiFetch } from '../../../../lib/api'
 import BuyButton from './BuyButton'
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const event = await apiFetch<Event>(`/events/${params.id}`).catch(() => null)
+  if (!event) return { title: 'Event — resell.' }
+  const d = new Date(event.dateTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+  return {
+    title:       `${event.title} Tickets — resell.`,
+    description: `Buy verified resale tickets for ${event.title} on ${d} at ${event.venue.name}, ${event.city}.`,
+    openGraph: {
+      title:       `${event.title} — resell.`,
+      description: `Verified resale tickets · ${event.venue.name}, ${event.city} · ${d}`,
+      type:        'website',
+    },
+  }
+}
 
 type Listing = {
   id: string; askingPrice: number; originalPrice: number;

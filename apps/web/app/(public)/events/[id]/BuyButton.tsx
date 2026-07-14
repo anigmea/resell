@@ -75,7 +75,8 @@ export default function BuyButton({ listingId, seat, sellerName, askingPrice }: 
             },
           )
           if (verifyRes.ok) {
-            window.location.href = '/orders'
+            const { orderId: confirmedId } = await verifyRes.json().catch(() => ({ orderId }))
+            window.location.href = `/orders/${confirmedId ?? orderId}`
           } else {
             const body = await verifyRes.json().catch(() => ({}))
             setError(body.error ?? 'Payment verification failed')
