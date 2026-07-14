@@ -19,6 +19,9 @@ export default function LoginPage() {
         body: JSON.stringify({ emailOrPhone: email, password }),
       })
       if (!res.ok) {
+        if (res.status === 401 || res.status === 403 || res.status === 404) {
+          throw new Error('Invalid email or password')
+        }
         const body = await res.json().catch(() => ({}))
         throw new Error(body.error ?? 'Login failed')
       }
@@ -76,7 +79,7 @@ export default function LoginPage() {
 
         <div className="flex items-center gap-3 my-4">
           <hr className="flex-1 border-t border-border border-b-0 border-l-0 border-r-0" />
-          <span className="text-[0.65rem] text-disabled">or</span>
+          <span className="text-[0.65rem] text-muted">or</span>
           <hr className="flex-1 border-t border-border border-b-0 border-l-0 border-r-0" />
         </div>
 

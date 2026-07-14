@@ -21,6 +21,8 @@ export default function RegisterPage() {
         body: JSON.stringify(form),
       })
       if (!res.ok) {
+        if (res.status === 409) throw new Error('An account with this email or phone already exists')
+        if (res.status === 404) throw new Error('Registration failed — please try again')
         const body = await res.json().catch(() => ({}))
         throw new Error(body.error ?? 'Registration failed')
       }
