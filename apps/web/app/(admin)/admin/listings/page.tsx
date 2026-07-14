@@ -20,8 +20,10 @@ export default async function AdminListingsPage({
 }: {
   searchParams: { status?: string | string[] }
 }) {
-  const status   = (Array.isArray(searchParams.status) ? searchParams.status[0] : searchParams.status)?.toUpperCase() ?? ''
-  const endpoint = status && status !== 'ALL' ? `/admin/listings?status=${status}` : '/admin/listings'
+  const rawStatus = Array.isArray(searchParams.status) ? searchParams.status[0] : searchParams.status
+  const STATUS_MAP: Record<string, string> = { pending: 'PENDING_VERIFICATION', active: 'ACTIVE', rejected: 'REJECTED' }
+  const status   = rawStatus ? STATUS_MAP[rawStatus.toLowerCase()] ?? rawStatus.toUpperCase() : ''
+  const endpoint = status ? `/admin/listings?status=${status}` : '/admin/listings'
   const listings = await apiFetch<AdminListing[]>(endpoint).catch(() => [] as AdminListing[])
 
   const activeTab = searchParams.status ? (Array.isArray(searchParams.status) ? searchParams.status[0] : searchParams.status) : 'All'
