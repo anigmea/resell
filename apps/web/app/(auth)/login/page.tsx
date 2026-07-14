@@ -16,7 +16,7 @@ export default function LoginPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ emailOrPhone: email, password }),
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
