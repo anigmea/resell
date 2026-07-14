@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: resell-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    plan: free
+    region: singapore
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: MSG91_AUTH_KEY
+        value: ""
+      - key: R2_ACCOUNT_ID
+        value: ""
+      - key: R2_ACCESS_KEY_ID
+        value: ""
+      - key: R2_SECRET_ACCESS_KEY
+        value: ""
+      - key: R2_BUCKET_NAME
+        value: "resell-tickets"
+      - key: R2_PUBLIC_URL
+        value: ""
