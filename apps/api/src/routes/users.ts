@@ -36,6 +36,20 @@ const userRoutes: FastifyPluginAsync = async (fastify) => {
     })
   })
 
+  fastify.get('/me/stats', { preHandler: verifyJwt }, async (req) => {
+    const [activeCount, pendingCount, soldOrders] = await Promise.all([
+      fastify.prisma.listing.count({ where: { sellerId: req.user.id, status: 'ACTIVE' } }),
+      fastify.prisma.listing.count({ where: { sellerId: req.user.id, status: 'PENDING_VERIFICATION' } }),
+      fastify.prisma.order.findMany({
+        where:   { listing: { sellerId: req.user.id }, paymentStatus: 'PAID' },
+        include: { listing: { select: { askingPrice: true } } },
+      }),
+    ])
+    const PLATFORM_FEE = 0.05
+    const totalEarned = soldOrders.reduce((sum, o) => sum + Math.round(o.listing.askingPrice * (1 - PLATFORM_FEE)), 0)
+    return { activeCount, pendingCount, soldCount: soldOrders.length, totalEarned }
+  })
+
   fastify.get('/me/listings', { preHandler: verifyJwt }, async (req) => {
     const page  = Number((req.query as any).page  ?? 1)
     const limit = Number((req.query as any).limit ?? 20)

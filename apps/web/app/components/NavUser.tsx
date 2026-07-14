@@ -115,6 +115,9 @@ export default function NavUser() {
               <Link href="/admin/listings" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
                 Admin — Listings
               </Link>
+              <Link href="/admin/users" onClick={() => setOpen(false)} className="block px-4 py-2 text-[0.75rem] text-secondary hover:text-primary hover:bg-bg no-underline transition-colors">
+                Admin — Users
+              </Link>
             </>
           )}
           <div className="border-t border-border mt-1 pt-1">

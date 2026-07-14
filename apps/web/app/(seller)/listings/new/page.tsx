@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Nav from '../../../components/Nav'
 
 const PLATFORM_FEE = 0.05
@@ -8,13 +9,19 @@ const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'
 type EventOption = { id: string; title: string; dateTime: string; city: string }
 
 export default function NewListingPage() {
+  const searchParams = useSearchParams()
+  const prefillId    = searchParams.get('eventId')
+  const prefillTitle = searchParams.get('eventTitle')
+
   const [form, setForm] = useState({
     section: '', row: '', seatNumber: '',
     originalPrice: '', askingPrice: '',
   })
   const [eventQuery,    setEventQuery]    = useState('')
   const [eventOptions,  setEventOptions]  = useState<EventOption[]>([])
-  const [selectedEvent, setSelectedEvent] = useState<EventOption | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<EventOption | null>(
+    prefillId && prefillTitle ? { id: prefillId, title: decodeURIComponent(prefillTitle), dateTime: '', city: '' } : null
+  )
   const [showDropdown,  setShowDropdown]  = useState(false)
   const [file, setFile]       = useState<File | null>(null)
   const [loading, setLoading] = useState(false)

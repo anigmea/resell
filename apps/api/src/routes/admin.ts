@@ -72,6 +72,34 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     })
   })
 
+  fastify.get('/users', { preHandler: guard }, async (req) => {
+    const page  = Number((req.query as any).page  ?? 1)
+    const limit = Number((req.query as any).limit ?? 50)
+    const role  = (req.query as any).role as string | undefined
+    return fastify.prisma.user.findMany({
+      where:   role ? { role: role as any } : undefined,
+      select: {
+        id: true, name: true, email: true, phone: true, role: true,
+        kycStatus: true, phoneVerified: true, createdAt: true,
+        _count: { select: { listings: true, buyerOrders: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip:    (page - 1) * limit,
+      take:    limit,
+    })
+  })
+
+  fastify.patch('/users/:id/role', { preHandler: guard }, async (req: any, reply) => {
+    const { role } = req.body as { role: string }
+    const allowed  = ['BUYER', 'SELLER', 'ADMIN']
+    if (!allowed.includes(role)) return reply.status(400).send({ error: 'Invalid role' })
+    return fastify.prisma.user.update({
+      where:  { id: req.params.id },
+      data:   { role: role as any },
+      select: { id: true, name: true, role: true },
+    })
+  })
+
   fastify.get('/events', { preHandler: guard }, async (req) => {
     const page  = Number((req.query as any).page  ?? 1)
     const limit = Number((req.query as any).limit ?? 50)

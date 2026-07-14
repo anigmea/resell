@@ -5,6 +5,8 @@ import Badge from '../../components/Badge'
 import { apiFetch } from '../../../lib/api'
 import RemoveButton from './RemoveButton'
 
+type Stats = { activeCount: number; pendingCount: number; soldCount: number; totalEarned: number }
+
 type MyListing = {
   id: string; askingPrice: number; status: string;
   seatSection?: string; seatRow?: string; seatNumber?: string;
@@ -27,12 +29,30 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 export default async function MyListingsPage() {
-  const listings = await apiFetch<MyListing[]>('/users/me/listings').catch(() => [] as MyListing[])
+  const [listings, stats] = await Promise.all([
+    apiFetch<MyListing[]>('/users/me/listings').catch(() => [] as MyListing[]),
+    apiFetch<Stats>('/users/me/stats').catch(() => null),
+  ])
 
   return (
     <div className="min-h-screen bg-bg">
       <Nav />
-      <div className="px-8 py-8">
+      <div className="px-4 md:px-8 py-8">
+        {stats && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+            {[
+              { label: 'Active',   value: stats.activeCount,  color: 'text-accent' },
+              { label: 'Pending',  value: stats.pendingCount, color: 'text-warning' },
+              { label: 'Sold',     value: stats.soldCount,    color: 'text-secondary' },
+              { label: 'Earned',   value: `₹${(stats.totalEarned / 100).toLocaleString('en-IN')}`, color: 'text-accent' },
+            ].map(s => (
+              <div key={s.label} className="bg-surface border border-border rounded-lg px-4 py-3">
+                <p className="text-[0.6rem] font-semibold text-muted uppercase tracking-wider mb-1">{s.label}</p>
+                <p className={`text-[1.1rem] font-extrabold tracking-tighter2 ${s.color}`}>{s.value}</p>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-[1.6rem] font-extrabold text-primary tracking-tighter2">My listings</h1>
           <Link
