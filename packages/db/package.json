@@ -6,15 +6,16 @@
   "types": "./src/index.ts",
   "scripts": {
     "db:generate": "prisma generate",
-    "db:migrate":  "prisma migrate dev",
-    "db:push":     "prisma db push",
-    "db:seed":     "tsx prisma/seed.ts"
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.14.0"
+    "@prisma/client": "^5.14.0",
+    "bcrypt": "^5.1.0"
   },
   "devDependencies": {
     "prisma": "^5.14.0",

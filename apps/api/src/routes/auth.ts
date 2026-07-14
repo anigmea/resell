@@ -17,8 +17,12 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post('/login', async (req, reply) => {
     const body = LoginSchema.parse(req.body)
     const { accessToken, refreshToken, user } = await svc.login(body)
+    const isProd = process.env.NODE_ENV === 'production'
     reply.setCookie('refreshToken', refreshToken, {
-      httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/',
+      httpOnly: true, secure: isProd, sameSite: 'lax', path: '/',
+    })
+    reply.setCookie('accessToken', accessToken, {
+      httpOnly: false, secure: isProd, sameSite: 'lax', path: '/', maxAge: 60 * 15,
     })
     return { accessToken, user }
   })
@@ -26,6 +30,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post('/logout', { preHandler: verifyJwt }, async (req, reply) => {
     await svc.logout(req.user.id)
     reply.clearCookie('refreshToken')
+    reply.clearCookie('accessToken')
     return { success: true }
   })
 
@@ -33,8 +38,12 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
     const token = req.cookies?.refreshToken
     if (!token) return reply.status(401).send({ error: 'No refresh token' })
     const tokens = await svc.refresh(token)
+    const isProd = process.env.NODE_ENV === 'production'
     reply.setCookie('refreshToken', tokens.refreshToken, {
-      httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/',
+      httpOnly: true, secure: isProd, sameSite: 'lax', path: '/',
+    })
+    reply.setCookie('accessToken', tokens.accessToken, {
+      httpOnly: false, secure: isProd, sameSite: 'lax', path: '/', maxAge: 60 * 15,
     })
     return { accessToken: tokens.accessToken }
   })

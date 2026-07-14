@@ -1,12 +1,12 @@
 import Link from 'next/link'
+import NavUser from './NavUser'
 
 interface NavProps {
-  backHref?: string
+  backHref?:  string
   backLabel?: string
-  userName?: string
 }
 
-export default function Nav({ backHref, backLabel, userName }: NavProps) {
+export default function Nav({ backHref, backLabel }: NavProps) {
   return (
     <nav aria-label="Main navigation" className="flex items-center justify-between px-8 py-[0.85rem] border-b border-border">
       <Link href="/" className="flex items-center no-underline">
@@ -25,18 +25,7 @@ export default function Nav({ backHref, backLabel, userName }: NavProps) {
         )}
       </div>
 
-      <div>
-        {userName ? (
-          <span className="text-[0.78rem] text-secondary font-medium">{userName}</span>
-        ) : (
-          <Link
-            href="/login"
-            className="text-[0.75rem] font-semibold border border-[#282828] text-secondary px-4 py-[5px] rounded-md no-underline transition-all hover:border-[#444] hover:text-primary"
-          >
-            Sign in
-          </Link>
-        )}
-      </div>
+      <NavUser />
     </nav>
   )
 }

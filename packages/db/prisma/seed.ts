@@ -1,10 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-import { createHash } from 'crypto'
+import { hashSync } from 'bcrypt'
 
 const prisma = new PrismaClient()
 
-// Simple hash for seed users (not bcrypt to avoid dep in seed)
-const hash = (pw: string) => createHash('sha256').update(pw).digest('hex')
+const hash = (pw: string) => hashSync(pw, 10)
 
 async function main() {
   console.log('Seeding database...')
@@ -269,7 +268,7 @@ async function main() {
   const [seller1, seller2, seller3, buyer1, buyer2, admin] = await Promise.all([
     prisma.user.upsert({
       where:  { email: 'rahul.seller@example.com' },
-      update: {},
+      update: { passwordHash: hash('password123') },
       create: {
         id:            'user-seller-1',
         name:          'Rahul Sharma',
@@ -284,7 +283,7 @@ async function main() {
     }),
     prisma.user.upsert({
       where:  { email: 'priya.seller@example.com' },
-      update: {},
+      update: { passwordHash: hash('password123') },
       create: {
         id:            'user-seller-2',
         name:          'Priya Mehta',
@@ -299,7 +298,7 @@ async function main() {
     }),
     prisma.user.upsert({
       where:  { email: 'arjun.seller@example.com' },
-      update: {},
+      update: { passwordHash: hash('password123') },
       create: {
         id:            'user-seller-3',
         name:          'Arjun Nair',
@@ -314,7 +313,7 @@ async function main() {
     }),
     prisma.user.upsert({
       where:  { email: 'sneha.buyer@example.com' },
-      update: {},
+      update: { passwordHash: hash('password123') },
       create: {
         id:            'user-buyer-1',
         name:          'Sneha Kulkarni',
@@ -328,7 +327,7 @@ async function main() {
     }),
     prisma.user.upsert({
       where:  { email: 'vikram.buyer@example.com' },
-      update: {},
+      update: { passwordHash: hash('password123') },
       create: {
         id:            'user-buyer-2',
         name:          'Vikram Singh',
@@ -342,7 +341,7 @@ async function main() {
     }),
     prisma.user.upsert({
       where:  { email: 'admin@resell.in' },
-      update: {},
+      update: { passwordHash: hash('admin123') },
       create: {
         id:            'user-admin',
         name:          'Resell Admin',
